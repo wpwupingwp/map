@@ -41,7 +41,7 @@ with open(argv[1], 'r') as raw:
         address.append(line.strip())
 
 pattern = re.compile(r'(<td>|\,{1,3}|")')
-out = open('result.google.json', 'w')
+out = open(argv[1]+'.json', 'w')
 for index, i in enumerate(address):
     s = i.split(',')
     query = re.sub(pattern, ' ', i)
