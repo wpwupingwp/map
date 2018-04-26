@@ -16,13 +16,14 @@ def google(query, key):
     print(markers)
     draw_url = 'https://maps.google.cn/maps/api/staticmap'
     r = requests.get(draw_url,
-                     params={'input': query,
-                             'markers': markers,
+                     params={
+                             'markers': 'size:tiny|'+markers,
                              'size': '640x640',
                              'scale': 2,
+#                             'zoom': 5,
                              'format': 'png',
                              'maptype': 'terrain',
-                             'center': 'China',
+#                             'center': 'China',
                              'language': 'zh-CN',
                              'region': 'cn',
                              'key': key})
