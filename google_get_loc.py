@@ -52,7 +52,10 @@ for index, i in enumerate(address):
         query = ','.join(s)
         print('\t', query)
         js = google(query, place_key, geocode_key)
-    result = [i, query, js]
+    if js['status'] == 'OK':
+        result = [i, query, js]
+    else:
+        continue
     print('\t', result[2]['status'])
     json.dump(result, out)
     out.write('\n')
