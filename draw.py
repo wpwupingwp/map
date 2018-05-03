@@ -14,12 +14,18 @@ map = Basemap(epsg=south_china_sea, lat_0=xi_an[1], lon_0=xi_an[0],
 
 data = load(open('./species_loc.json', 'r'))
 for species in data:
-    fig, ax = plt.subplots(figsize=(20,20))
+#     ax.axis('off')
+    plt.figure(figsize=(20,20))
     map.readshapefile('./province', 'province', drawbounds=True)
+    map.drawmeridians(range(80,140,10), labels=(0,0,1,1), fontsize=15)
+    map.drawparallels(range(0,80, 10), labels=(1,1,0,0), fontsize=15)
     loc = data[species]
     lat_list = [i[0] for i in loc]
     lon_list = [i[1] for i in loc]
     x, y = map(lon_list, lat_list)
-    ax.scatter(x, y, marker='D', color='r', s=10)
+    label = '$\it{{{}}}$'.format(species.replace(' ', '\ '))
+    plt.scatter(x, y, marker='o', color='r', s=15, label=label)
+    legend = plt.legend(bbox_to_anchor=(0.01, 0.15,0,0),loc='lower left',
+                       fontsize=30, markerscale=5)
+    # legend.get_frame().set_linewidth(0)
     plt.savefig(species+'.svg')
-    plt.show()
