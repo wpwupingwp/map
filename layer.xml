@@ -1,0 +1,2 @@
+    <layer-tree-layer expanded="1" providerKey="ogr" checked="Qt::Checked" id="{layer_id}" source="/vsizip/{path}|layername={layer_name}" name="{name}">
+    </layer-tree-layer>

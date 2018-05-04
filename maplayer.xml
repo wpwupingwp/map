@@ -1,0 +1,18 @@
+    <maplayer simplifyAlgorithm="0" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" readOnly="0" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <id>{layer_id}</id>
+      <datasource>{path}|layername={layer_name}</datasource>
+      <layername>{layer_name}</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=longlat +ellps=GRS80 +no_defs</proj4>
+          <srsid>3230</srsid>
+          <srid>4019</srid>
+          <authid>EPSG:4019</authid>
+          <description>Unknown datum based upon the GRS 1980 ellipsoid</description>
+          <projectionacronym>longlat</projectionacronym>
+          <ellipsoidacronym>GRS80</ellipsoidacronym>
+          <geographicflag>true</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
