@@ -1,0 +1,10 @@
+<!DOCTYPE qgis-layer-definition>
+<qlr>
+  <layer-tree-group expanded="1" checked="Qt::Checked" name="">
+    <customproperties/>
+  {layer_str}
+  </layer-tree-group>
+  <maplayers>
+  {maplayer_str}
+  </maplayers>
+</qlr>
