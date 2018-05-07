@@ -22,9 +22,10 @@ species_template = ('{name} (<a href="./png/{name}.png">png</a>|<a'
 content = ''
 for i in genus_species:
     title = title_template.format(genus=i)
-    species = ''
+    species = '\t<p>'
     for j in genus_species[i]:
         species += species_template.format(name=j)
-    content = '\n'.join([content, title, species])
+    species += '</p>\n'
+    content = ' '.join([content, title, species])
 with open('./index.html', 'w') as out:
     out.write(template.format(content=content))
