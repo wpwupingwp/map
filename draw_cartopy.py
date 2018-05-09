@@ -9,13 +9,14 @@ import json
 import pickle
 
 south_china_sea = 3415
-crs = ccrs.PlateCarree()
+crs = ccrs.Mercator()
 crs2 = ccrs.epsg(3415)
 xi_an = (108.886, 34.265)
-fig = plt.figure(figsize=(20,20))
 #ax = fig.add_subplot(1, 1, 1, projection=south_china_sea)
 crs = ccrs.Mercator()
-ax = fig.add_subplot(1, 1, 1, projection=crs)
+# fig = plt.figure(figsize=(20,20))
+# ax = fig.add_subplot(1,1,1,projection=crs)
+ax = plt.axes(projection=crs)
 #ax.set_extent([140, 80, -2, 55], crs=crs)
 ax.set_extent([136, 72, 3, 55], crs=crs)
 nation = Reader('/home/ping/work/map/Basemap/nation')
@@ -30,8 +31,7 @@ ax.add_geometries(river.geometries(), crs=crs, edgecolor='#189EEC',
                   facecolor='none', linewidth=1)
 ax.add_geometries(lake.geometries(), crs=crs, edgecolor='#189EEC',
                   facecolor='none', linewidth=1)
-ax.gridlines(draw_labels=True, color='#888888', alpha=0.5)
-plt.show()
+# ax.gridlines(color='#888888', alpha=0.5)
 tmpfile = io.BytesIO()
 pickle.dump(ax, tmpfile)
 
@@ -40,11 +40,11 @@ for species in data:
     tmpfile.seek(0)
     ax = pickle.load(tmpfile)
     loc = data[species]
-    lat_list = [i[0] for i in loc]
-    lon_list = [i[1] for i in loc]
-    x, y = basemap(lon_list, lat_list)
+    lat = [i[0] for i in loc]
+    lon = [i[1] for i in loc]
     label = '$\it{{{}}}$'.format(species.replace(' ', '\ '))
-    ax.scatter(x, y, marker='o', color='r', s=15, label=label, crs=crs)
+    ax.scatter(lon, lat, marker='o', color='r', s=15, label=label,
+               transform=crs)
     legend = plt.legend(bbox_to_anchor=(0.01, 0.15, 0, 0), loc='lower left',
                         fontsize=30, markerscale=5)
     # legend.get_frame().set_linewidth(0)
