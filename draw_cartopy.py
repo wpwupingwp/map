@@ -11,12 +11,10 @@ import pickle
 south_china_sea = 3415
 crs = ccrs.Mercator()
 crs2 = ccrs.epsg(3415)
-xi_an = (108.886, 34.265)
-#ax = fig.add_subplot(1, 1, 1, projection=south_china_sea)
 crs = ccrs.Mercator()
-# fig = plt.figure(figsize=(20,20))
-# ax = fig.add_subplot(1,1,1,projection=crs)
-ax = plt.axes(projection=crs)
+fig = plt.figure(figsize=(20,20))
+ax = fig.add_subplot(1, 1, 1, projection=crs)
+#ax = plt.axes(projection=crs)
 #ax.set_extent([140, 80, -2, 55], crs=crs)
 ax.set_extent([136, 72, 3, 55], crs=crs)
 nation = Reader('/home/ping/work/map/Basemap/nation')
@@ -48,7 +46,7 @@ for species in data:
     legend = plt.legend(bbox_to_anchor=(0.01, 0.15, 0, 0), loc='lower left',
                         fontsize=30, markerscale=5)
     # legend.get_frame().set_linewidth(0)
-    plt.show()
+    # plt.show()
     plt.savefig(species+'.svg')
 
     print('{}, {} distribution(s)'.format(species, len(loc)))
