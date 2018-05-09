@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 from mpl_toolkits.basemap import Basemap
+from sys import argv
 import matplotlib.pyplot as plt
-from json import load
 
 wgs84 = 4326
 south_china_sea = 3415
@@ -11,7 +11,11 @@ map = Basemap(epsg=south_china_sea, lat_0=xi_an[1], lon_0=xi_an[0],
               llcrnrlon=80, llcrnrlat=-2, urcrnrlon=140,
               urcrnrlat=55)
 
-data = load(open('./species_loc.json', 'r'))
+with open(argv[1], 'r') as _:
+    # skip head
+    _.readline()
+    raw = _.readlines()
+data = [i.strip().split(',') for i in raw]
 for species in data:
     # ax.axis('off')
     plt.figure(figsize=(20, 20))
