@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
-from mpl_toolkits.basemap import Basemap
 from sys import argv
+from os.path import join as path_join
+from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import io
 import json
@@ -16,14 +17,14 @@ m = Basemap(epsg=south_china_sea, lat_0=xi_an[1], lon_0=xi_an[0],
             llcrnrlon=80, llcrnrlat=-2, urcrnrlon=140, urcrnrlat=55,
             ax=ax)
 
-m.readshapefile('/home/ping/work/map/Basemap/nation', 'nation',
-          drawbounds=True, linewidth=2, color='#000000')
-m.readshapefile('/home/ping/work/map/Basemap/province', 'province',
-          drawbounds=True, linewidth=1, color='#222222')
-m.readshapefile('/home/ping/work/map/Basemap/river', 'river',
-          drawbounds=True, linewidth=1, color='#189EEC')
-m.readshapefile('/home/ping/work/map/Basemap/lake', 'lake',
-          drawbounds=True, linewidth=1, color='#189EEC')
+m.readshapefile(path_join('Basemap', 'nation'), 'nation', drawbounds=True,
+                linewidth=2, color='#000000')
+m.readshapefile(path_join('Basemap', 'province'), 'province', drawbounds=True,
+                linewidth=1, color='#222222')
+m.readshapefile(path_join('Basemap', 'river'), 'river', drawbounds=True,
+                linewidth=1, color='#189EEC')
+m.readshapefile(path_join('Basemap', 'lake'), 'lake', drawbounds=True,
+                linewidth=1, color='#189EEC')
 m.drawmeridians(range(80, 140, 10),  labels=(0, 0, 1, 1),  fontsize=15)
 m.drawparallels(range(0, 80, 10),  labels=(1, 1, 0, 0),  fontsize=15)
 tmpfile = io.BytesIO()
