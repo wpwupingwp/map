@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 from sys import argv
-import matplotlib.pyplot as plt
+from os.path import join as path_join
 from cartopy.io.shapereader import Reader
 import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
 import io
 import json
 import pickle
@@ -17,10 +18,10 @@ ax = fig.add_subplot(1, 1, 1, projection=crs)
 #ax = plt.axes(projection=crs)
 #ax.set_extent([140, 80, -2, 55], crs=crs)
 ax.set_extent([136, 72, 3, 55], crs=crs)
-nation = Reader('/home/ping/work/map/Basemap/nation')
-province = Reader('/home/ping/work/map/Basemap/province')
-river = Reader('/home/ping/work/map/Basemap/river')
-lake = Reader('/home/ping/work/map/Basemap/lake')
+nation = Reader(path_join('Basemap', 'nation'))
+province = Reader(path_join('Basemap', 'province'))
+river = Reader(path_join('Basemap', 'river'))
+lake = Reader(path_join('Basemap', 'lake'))
 ax.add_geometries(nation.geometries(), crs=crs, edgecolor='#000000',
                   facecolor='none', linewidth=2)
 ax.add_geometries(province.geometries(), crs=crs, edgecolor='#222222',
