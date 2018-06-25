@@ -18,10 +18,13 @@ ax = fig.add_subplot(1, 1, 1, projection=crs)
 #ax = plt.axes(projection=crs)
 #ax.set_extent([140, 80, -2, 55], crs=crs)
 ax.set_extent([136, 72, 3, 55], crs=crs)
+world = Reader(path_join('Basemap', 'world'))
 nation = Reader(path_join('Basemap', 'nation'))
 province = Reader(path_join('Basemap', 'province'))
 river = Reader(path_join('Basemap', 'river'))
 lake = Reader(path_join('Basemap', 'lake'))
+ax.add_geometries(world.geometries(), crs=crs, edgecolor='#555555',
+                  facecolor='none', linewidth=1.5)
 ax.add_geometries(nation.geometries(), crs=crs, edgecolor='#000000',
                   facecolor='none', linewidth=2)
 ax.add_geometries(province.geometries(), crs=crs, edgecolor='#222222',
