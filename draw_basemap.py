@@ -17,6 +17,8 @@ m = Basemap(epsg=south_china_sea, lat_0=xi_an[1], lon_0=xi_an[0],
             llcrnrlon=80, llcrnrlat=-2, urcrnrlon=140, urcrnrlat=55,
             ax=ax)
 
+m.readshapefile(path_join('Basemap', 'world'), 'world', drawbounds=True,
+                linewidth=2, color='#666666')
 m.readshapefile(path_join('Basemap', 'nation'), 'nation', drawbounds=True,
                 linewidth=2, color='#000000')
 m.readshapefile(path_join('Basemap', 'province'), 'province', drawbounds=True,
