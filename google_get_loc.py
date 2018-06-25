@@ -36,6 +36,8 @@ with open('key', 'r') as key:
     geocode_key = key.readline().strip().split(' ')[1]
 # get query list
 address = list()
+# Format:
+# Name,Country,Province,City,Detail
 with open(argv[1], 'r') as raw:
     for line in raw:
         address.append(line.strip())
@@ -43,8 +45,8 @@ with open(argv[1], 'r') as raw:
 pattern = re.compile(r'(<td>|\,{1,3}|")')
 out = open(argv[1]+'.json', 'w')
 for index, i in enumerate(address):
-    s = i.split(',')
-    query = re.sub(pattern, ' ', i)
+    s = i.split(',')[1:]
+    query = re.sub(pattern, ' ', ','.join(s))
     print(index, query)
     js = google(query, place_key, geocode_key)
     while js['status'] != 'OK' and len(s) != 0:
