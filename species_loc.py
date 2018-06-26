@@ -27,7 +27,7 @@ def get_addr_loc(arg):
         if js['status'] == 'OK':
             # [latitude, longitude]
             loc = list(js['results'][0]['geometry']['location'].values())
-            addr_loc[raw_addr] = loc
+            addr_loc[addr] = loc
             good.write(i)
         else:
             bad_n += 1
