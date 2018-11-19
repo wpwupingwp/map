@@ -7,9 +7,9 @@ from collections import defaultdict
 
 def parse_args():
     arg = argparse.ArgumentParser(description=main.__doc__)
-    arg.add_argument('json_file', help='Geocoding result file (json)')
-    arg.add_argument('csv_file', help='Species-Address csv file')
-    arg.add_argument('-o', '--out', help='output directory')
+    arg.add_argument('-jjson', help='Geocoding result file (json)')
+    arg.add_argument('-csv', help='Species-Address csv file')
+    arg.add_argument('-out', help='output directory')
     arg.print_help()
     return arg.parse_args()
 
