@@ -35,27 +35,28 @@ with open('key', 'r') as key:
     place_key = key.readline().strip().split(' ')[1]
     geocode_key = key.readline().strip().split(' ')[1]
 # get query list
-address = list()
 # Format:
 # Name,Country,Province,City,Detail
-with open(argv[1], 'r') as raw:
-    for line in raw:
-        address.append(line.strip())
+with open(argv[1], 'r') as _:
+    raw = _.readlines()
+    raw2 = [i.strip().split(',') for i in raw]
+    name_address = [[i[0], ','.join(i[1:])] for i in raw2]
+address_dict = {i[1]: 0 for i in name_address}
+total = len(address_dict)
 
-pattern = re.compile(r'(<td>|\,{1,3}|")')
 out = open(argv[1]+'.json', 'w')
-for index, i in enumerate(address):
-    s = i.split(',')[1:]
-    query = re.sub(pattern, ' ', ','.join(s))
-    print(index, query)
+for index, address_str in enumerate(list(address_dict.keys())):
+    addr_list = address_str.split(',')
+    query = ','.join(addr_list)
+    print('{} of {}, {}'.format(index, total, query))
     js = google(query, place_key, geocode_key)
-    while js['status'] != 'OK' and len(s) != 0:
-        s.pop()
-        query = ','.join(s)
+    while js['status'] != 'OK' and len(addr_list) != 0:
+        addr_list.pop()
+        query = ','.join(addr_list)
         print('\t', query)
         js = google(query, place_key, geocode_key)
     if js['status'] == 'OK':
-        result = [i, query, js]
+        result = [address_str, query, js]
     else:
         continue
     print('\t', result[2]['status'])
