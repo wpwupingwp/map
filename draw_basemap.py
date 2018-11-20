@@ -16,7 +16,7 @@ xi_an = (108.886, 34.265)
 plt.figure(figsize=(20, 20))
 ax = plt.gca()
 m = Basemap(epsg=south_china_sea, lat_0=xi_an[1], lon_0=xi_an[0],
-            llcrnrlon=72, llcrnrlat=-2, urcrnrlon=136, urcrnrlat=55,
+            llcrnrlon=80, llcrnrlat=-2, urcrnrlon=140, urcrnrlat=55,
             ax=ax)
 
 #m.readshapefile(path_join('Basemap', 'world'), 'world', drawbounds=True,
@@ -55,3 +55,4 @@ for species in data:
     # legend.get_frame().set_linewidth(0)
     plt.savefig(species+'.svg')
     print('{}, {} distribution(s)'.format(species, len(loc)))
+    plt.close()
