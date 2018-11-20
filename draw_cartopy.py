@@ -54,3 +54,4 @@ for species in data:
     plt.savefig(species+'.svg')
 
     print('{}, {} distribution(s)'.format(species, len(loc)))
+    #plt.close(ax)
