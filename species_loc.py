@@ -7,7 +7,7 @@ from collections import defaultdict
 
 def parse_args():
     arg = argparse.ArgumentParser(description=main.__doc__)
-    arg.add_argument('-jjson', help='Geocoding result file (json)')
+    arg.add_argument('-json', help='Geocoding result file (json)')
     arg.add_argument('-csv', help='Species-Address csv file')
     arg.add_argument('-out', help='output directory')
     arg.print_help()
@@ -15,11 +15,11 @@ def parse_args():
 
 
 def get_addr_loc(arg):
-    with open(arg.json_file, 'r') as _:
+    with open(arg.json, 'r') as _:
         raw = _.readlines()
     addr_loc = dict()
-    good = open(arg.json_file+'.good.json', 'w')
-    bad = open(arg.json_file+'.bad.json', 'w')
+    good = open(arg.json+'.good.json', 'w')
+    bad = open(arg.json+'.bad.json', 'w')
     bad_n = 0
     for i in raw:
         record = json.loads(i)
@@ -42,7 +42,7 @@ def main():
 
     species_loc = defaultdict(list)
     addr_loc, bad_loc = get_addr_loc(arg)
-    with open(arg.csv_file, 'r') as _:
+    with open(arg.csv, 'r') as _:
         raw = _.readlines()
     for rawline in raw:
         line = rawline.strip().split(',')
