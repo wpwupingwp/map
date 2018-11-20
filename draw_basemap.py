@@ -16,13 +16,14 @@ xi_an = (108.886, 34.265)
 plt.figure(figsize=(20, 20))
 ax = plt.gca()
 m = Basemap(epsg=south_china_sea, lat_0=xi_an[1], lon_0=xi_an[0],
-            llcrnrlon=80, llcrnrlat=-2, urcrnrlon=140, urcrnrlat=55,
+            llcrnrlon=72, llcrnrlat=-2, urcrnrlon=136, urcrnrlat=55,
             ax=ax)
 
-m.readshapefile(path_join('Basemap', 'world'), 'world', drawbounds=True,
-                linewidth=1.5, color='#666666', zorder=1)
+#m.readshapefile(path_join('Basemap', 'world'), 'world', drawbounds=True,
+#                linewidth=1.5, color='#666666', zorder=1)
 m.readshapefile(path_join('Basemap', 'nation-polygon'), 'nation',
                 drawbounds=True, linewidth=2, color='#000000')
+# use nation to cover world for south tibet
 p = [Polygon(i) for i in m.nation]
 ax.add_collection(PatchCollection(p, facecolor='#FFFFFF',
                                   edgecolor='#000000', linewidths=2,
