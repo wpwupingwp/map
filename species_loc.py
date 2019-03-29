@@ -18,8 +18,8 @@ def get_addr_loc(arg):
     with open(arg.json, 'r') as _:
         raw = _.readlines()
     addr_loc = dict()
-    good = open(arg.json+'.good.json', 'w')
-    bad = open(arg.json+'.bad.json', 'w')
+    # good = open(arg.json+'.good.json', 'w')
+    # bad = open(arg.json+'.bad.json', 'w')
     bad_n = 0
     for i in raw:
         record = json.loads(i)
@@ -28,17 +28,17 @@ def get_addr_loc(arg):
             # [latitude, longitude]
             loc = list(js['results'][0]['geometry']['location'].values())
             addr_loc[addr] = loc
-            good.write(i)
+            # good.write(i)
         else:
             bad_n += 1
-            bad.write(i)
+            # bad.write(i)
     return addr_loc, bad_n
 
 
 def main():
     arg = parse_args()
     if arg.out is None:
-        arg.out = 'Species_Location.json'
+        arg.out = arg.csv + '.result'
 
     species_loc = defaultdict(list)
     addr_loc, bad_loc = get_addr_loc(arg)
@@ -54,6 +54,10 @@ def main():
         species_loc[species].append(addr_loc[place])
     with open(arg.out, 'w') as out:
         json.dump(species_loc, out)
+    with open(arg.out+'.csv', 'w') as out:
+        for i in species_loc:
+            for j in species_loc[i]:
+                out.write('{},{},{}\n'.format(i, j[0], j[1]))
     print('{} records.'.format(len(raw)))
     print('{} species.'.format(len(species_loc)))
     print('Good geocoding results:\t{}'.format(len(addr_loc)))

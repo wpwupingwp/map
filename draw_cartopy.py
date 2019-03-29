@@ -52,6 +52,7 @@ for species in data:
     # legend.get_frame().set_linewidth(0)
     # plt.show()
     plt.savefig(species+'.svg')
+    plt.close()
 
     print('{}, {} distribution(s)'.format(species, len(loc)))
     #plt.close(ax)
