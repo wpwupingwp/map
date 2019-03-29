@@ -10,7 +10,6 @@ def parse_args():
     arg.add_argument('-json', help='Geocoding result file (json)')
     arg.add_argument('-csv', help='Species-Address csv file')
     arg.add_argument('-out', help='output directory')
-    arg.print_help()
     return arg.parse_args()
 
 
