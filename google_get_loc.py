@@ -10,8 +10,16 @@ import requests
 from read_key import read_key
 
 
-key = read_key()['google']
-proxy = {'http': '127.0.0.1:1080'}
+def init():
+    global key, proxy
+    key = read_key()['google']
+    proxy = {'http': '127.0.0.1:1080'}
+    r = requests.get('https://www.baidu.com', proxies=proxy)
+    if r.status_code != 200:
+        print('Proxy Error')
+        exit(1)
+    else:
+        print('Proxy OK')
 
 
 def get_address_list(list_file: Path) -> list:
@@ -52,6 +60,7 @@ def google(query: str, key: str) -> 'json':
 
 
 def main():
+    init()
     input_file = Path(argv[1])
     out_file = input_file.with_suffix('.json')
     all_result = list()
