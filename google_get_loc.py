@@ -5,16 +5,18 @@ from sys import argv
 from functools import lru_cache
 from pathlib import Path
 
-import requests
+from requests import get
+
 
 from read_key import read_key
 
+key = read_key()['google']
+proxy = {'http': 'http://127.0.0.1:1080'}
+
 
 def init():
-    global key, proxy
-    key = read_key()['google']
-    proxy = {'http': '127.0.0.1:1080'}
-    r = requests.get('https://www.baidu.com', proxies=proxy)
+    r = get('https://ipip.net', proxies=proxy)
+    print(r.text)
     if r.status_code != 200:
         print('Proxy Error')
         exit(1)
@@ -41,26 +43,26 @@ def google(query: str, key: str) -> 'json':
     """
     place_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
     geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
-    r = requests.get(place_url,
-                     params={'input': query, 'language': 'zh-CN', 'key': key},
-                     proxies=proxy)
+    r = get(place_url,
+            params={'input': query, 'language': 'zh-CN', 'key': key})
+    # proxies=proxy)
     if r.status_code == 200:
         autocomplete = r.json()
     else:
         return {'status': r.status_code}
     if autocomplete['status'] == 'OK':
         place_id = autocomplete['predictions'][0]['place_id']
-        r2 = requests.get(geocode_url, params={'place_id': place_id,
-                                               'key': key})
+        r2 = get(geocode_url, params={'place_id': place_id, 'key': key})
+        # proxies=proxy)
     else:
-        r2 = requests.get(geocode_url, params={'address': query,
-                                               'key': key})
+        r2 = get(geocode_url, params={'address': query, 'key': key})
+        # proxies=proxy)
     js = r2.json()
     return js
 
 
 def main():
-    init()
+    # init()
     input_file = Path(argv[1])
     out_file = input_file.with_suffix('.json')
     all_result = list()
@@ -70,6 +72,7 @@ def main():
         addr_list = address.split(',')
         query = ','.join(addr_list)
         js = google(query, key)
+        result = [address, query, js]
         while js['status'] != 'OK' and len(addr_list) != 0:
             addr_list.pop()
             query = ','.join(addr_list)
@@ -82,7 +85,7 @@ def main():
                 result = [address, '', '']
         all_result.append(result)
     with open(out_file, 'w', encoding='utf-8') as out:
-        json.dump(result, out)
+        json.dump(all_result, out)
     return
 
 
