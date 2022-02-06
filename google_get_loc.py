@@ -37,7 +37,7 @@ def get_address_list(list_file: Path) -> list:
     return address_list
 
 
-@lru_cache(maxsize=0)
+@lru_cache(maxsize=None)
 def google(query: str, key: str) -> 'json':
     """
     Input: query, key
@@ -48,6 +48,7 @@ def google(query: str, key: str) -> 'json':
     r = get(place_url,
             params={'input': query, 'language': 'zh-CN', 'key': key})
     # proxies=proxy)
+    print(r)
     if r.status_code == 200:
         autocomplete = r.json()
     else:
@@ -55,10 +56,10 @@ def google(query: str, key: str) -> 'json':
     if autocomplete['status'] == 'OK':
         place_id = autocomplete['predictions'][0]['place_id']
         r2 = get(geocode_url, params={'place_id': place_id, 'key': key},
-                proxies=proxy)
+                 proxies=proxy)
     else:
         r2 = get(geocode_url, params={'address': query, 'key': key},
-                proxies=proxy)
+                 proxies=proxy)
     js = r2.json()
     return js
 
