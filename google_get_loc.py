@@ -18,7 +18,7 @@ def init():
     global key, proxy
     key = read_key()['google']
     proxy = {'https': 'http://127.0.0.1:1080'}
-    r = requests.get('https://www.bing.com', proxies=proxy)
+    r = get('https://www.bing.com', proxies=proxy)
     if r.status_code != 200:
         print('Proxy Error')
         exit(1)
@@ -54,13 +54,11 @@ def google(query: str, key: str) -> 'json':
         return {'status': r.status_code}
     if autocomplete['status'] == 'OK':
         place_id = autocomplete['predictions'][0]['place_id']
-        r2 = requests.get(geocode_url,
-                          params={'place_id': place_id, 'key': key},
-                          proxies=proxy)
+        r2 = get(geocode_url, params={'place_id': place_id, 'key': key},
+                proxies=proxy)
     else:
-        r2 = requests.get(geocode_url,
-                          params={'address': query, 'key': key},
-                          proxies=proxy)
+        r2 = get(geocode_url, params={'address': query, 'key': key},
+                proxies=proxy)
     js = r2.json()
     return js
 
