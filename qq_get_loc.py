@@ -2,11 +2,11 @@
 
 import requests
 import json
-from time import sleep
-from sys import argv
 from functools import lru_cache
-from pathlib import Path
 from hashlib import md5
+from pathlib import Path
+from sys import argv
+from time import sleep
 
 from read_key import read_key
 
@@ -14,7 +14,9 @@ qq_key = read_key()['qq']
 baidu_key = read_key()['baidu']
 decode_url = 'https://apis.map.qq.com/ws/geocoder/v1/'
 search_url = 'https://apis.map.qq.com/ws/place/v1/search'
+proxy = {'http': 'http://127.0.0.1:1080'}
 address = list()
+
 
 def get_address_list(list_file: Path) -> list:
     # each line for one address, must be utf-8
@@ -32,7 +34,7 @@ def translate(query: str, key: str) -> str:
     salt = 'baidu'
     sign_str = ''.join([app_id, query, salt, key])
     sign = md5(sign_str.encode('utf-8')).hexdigest()
-    r = requests.get(url, params={'q': query, 'from': 'en', 'to': 'zh',
+    r = requests.get(url, params={'q': query, 'from': 'auto', 'to': 'zh',
                                   'appid': app_id, 'salt': salt, 'sign': sign})
     # print(r.url)
     result = r.json()
@@ -44,15 +46,17 @@ def translate(query: str, key: str) -> str:
 @lru_cache(maxsize=None)
 def get_loc(query: str):
     zh = translate(query, baidu_key)
-    r = requests.get(decode_url, params={'address': query, 'output': 'json',
-                                         'key': qq_key})
-                     # proxies={'http': '127.0.0.1:1080'},
-    print(r.url)
+    r = requests.get(decode_url, params={'address': zh, 'output': 'json',
+                                         'key': qq_key}, timeout=1)
+    # print(r.url)
     if r.status_code == 200:
-        print(r.content)
+        result = r.json()
+        lng = result['result']['location']['lng']
+        lat = result['result']['location']['lat']
+        print(query, lng, lat)
+        return query, lng, lat
     else:
-        print(r.status_code, query, r.text.decode('utf8'))
-    return r.json()
+        return [query, '', '']
 
 
 def main():
