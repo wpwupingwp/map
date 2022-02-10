@@ -6,15 +6,17 @@ from time import sleep
 from sys import argv
 from functools import lru_cache
 from pathlib import Path
+from hashlib import md5
 
 from read_key import read_key
 
-key = read_key()['qq']
+qq_key = read_key()['qq']
+baidu_key = read_key()['baidu']
 decode_url = 'https://apis.map.qq.com/ws/geocoder/v1/'
 search_url = 'https://apis.map.qq.com/ws/place/v1/search'
 address = list()
 
-def get_address_list(list_file: Path) ->list:
+def get_address_list(list_file: Path) -> list:
     # each line for one address, must be utf-8
     address_list = list()
     with open(list_file, 'r', encoding='utf-8') as raw:
@@ -23,11 +25,25 @@ def get_address_list(list_file: Path) ->list:
     return address_list
 
 
-@lrucache(maxsize=None)
+@lru_cache(maxsize=None)
+def translate(query: str, key: str) -> str:
+    url = 'https://fanyi-api.baidu.com/api/trans/vip/translate'
+    app_id = '20220210001079060'
+    salt = 'baidu'
+    sign = md5(''.join([app_id, query, salt, key])).hexdigest()
+    r = requests.get(url, params={'q': query, 'to': 'zh', 'appid': app_id,
+                                  'salt': salt, 'sign': sign})
+    print(r.url)
+    print(r.json)
+    pass
+
+
+@lru_cache(maxsize=None)
 def get_loc(query: str, key: str):
-    r = requests.get(decode_url, params={'address': i, 'output': 'json',
-                                         'key': key})
+    r = requests.get(decode_url, params={'address': query, 'output': 'json',
+                                         'key': qq_key})
                      # proxies={'http': '127.0.0.1:1080'},
+    print(r.url)
     if r.status_code == 200:
         print(r.content)
     else:
@@ -43,9 +59,9 @@ def main():
     address_list = get_address_list(input_file)
     for index, address in enumerate(address_list):
         print(index, address)
-        result = get_loc(address, key)
+        result = get_loc(address, qq_key)
         all_result.append(result)
-        sleep(0.22)
+        sleep(0.2)
     with open(out_file, 'w', encoding='utf-8') as out:
         json.dump(all_result, out)
     return
