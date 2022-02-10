@@ -38,7 +38,10 @@ def translate(query: str, key: str) -> str:
                                   'appid': app_id, 'salt': salt, 'sign': sign})
     # print(r.url)
     result = r.json()
-    dst = result['trans_result'][0]['dst']
+    try:
+        dst = result['trans_result'][0]['dst']
+    except KeyError:
+        dst = 'None'
     print('\t', dst)
     return dst
 
