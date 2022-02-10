@@ -38,28 +38,34 @@ def get_address_list(list_file: Path) -> list:
 
 
 @lru_cache(maxsize=None)
-def google(query: str, key: str) -> 'json':
+def place_search(query: str, key: str):
+    """
+    Return None for failed.
+    """
+    place_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+    r = get(place_url,
+            params={'input': query, 'language': 'zh-CN', 'key': key},
+            proxies=proxy)
+    return r.json()
+
+
+@lru_cache
+def geolocaiton(query: str, key: str) -> 'json':
+
     """
     Input: query, key
     Output: json()
     """
-    place_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
     geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
-    r = get(place_url,
-            params={'input': query, 'language': 'zh-CN', 'key': key})
     # proxies=proxy)
-    print(r)
-    if r.status_code == 200:
-        autocomplete = r.json()
-    else:
-        return {'status': r.status_code}
+    autocomplete = place_search(query, key)
     if autocomplete['status'] == 'OK':
         place_id = autocomplete['predictions'][0]['place_id']
-        r2 = get(geocode_url, params={'place_id': place_id, 'key': key},
-                 proxies=proxy)
+        r = get(geocode_url, params={'place_id': place_id, 'key': key},
+                proxies=proxy)
     else:
-        r2 = get(geocode_url, params={'address': query, 'key': key},
-                 proxies=proxy)
+        r = get(geocode_url, params={'address': query, 'key': key},
+                proxies=proxy)
     js = r2.json()
     return js
 
