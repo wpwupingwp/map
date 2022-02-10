@@ -50,7 +50,7 @@ def place_search(query: str, key: str):
 
 
 @lru_cache
-def geolocaiton(query: str, key: str) -> 'json':
+def geolocation(query: str, key: str) -> 'json':
 
     """
     Input: query, key
@@ -66,7 +66,8 @@ def geolocaiton(query: str, key: str) -> 'json':
     else:
         r = get(geocode_url, params={'address': query, 'key': key},
                 proxies=proxy)
-    js = r2.json()
+        print(r.url)
+    js = r.json()
     return js
 
 
@@ -80,13 +81,13 @@ def main():
         print(index, address)
         addr_list = address.split(',')
         query = ','.join(addr_list)
-        js = google(query, key)
+        js = geolocation(query, key)
         result = [address, query, js]
         while js['status'] != 'OK' and len(addr_list) != 0:
             addr_list.pop()
             query = ','.join(addr_list)
             print('\t', query)
-            js = google(query, key)
+            js = geolocation(query, key)
             if js['status'] == 'OK':
                 result = [address, query, js]
                 break
