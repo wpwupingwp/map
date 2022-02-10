@@ -51,6 +51,9 @@ def get_loc(query: str):
     # print(r.url)
     if r.status_code == 200:
         result = r.json()
+        if result['status'] != 0:
+            print(result)
+            return [query, '', '']
         lng = result['result']['location']['lng']
         lat = result['result']['location']['lat']
         print(query, lng, lat)
