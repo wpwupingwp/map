@@ -30,16 +30,20 @@ def translate(query: str, key: str) -> str:
     url = 'https://fanyi-api.baidu.com/api/trans/vip/translate'
     app_id = '20220210001079060'
     salt = 'baidu'
-    sign = md5(''.join([app_id, query, salt, key])).hexdigest()
-    r = requests.get(url, params={'q': query, 'to': 'zh', 'appid': app_id,
-                                  'salt': salt, 'sign': sign})
-    print(r.url)
-    print(r.json)
-    pass
+    sign_str = ''.join([app_id, query, salt, key])
+    sign = md5(sign_str.encode('utf-8')).hexdigest()
+    r = requests.get(url, params={'q': query, 'from': 'en', 'to': 'zh',
+                                  'appid': app_id, 'salt': salt, 'sign': sign})
+    # print(r.url)
+    result = r.json()
+    dst = result['trans_result'][0]['dst']
+    print('\t', dst)
+    return dst
 
 
 @lru_cache(maxsize=None)
-def get_loc(query: str, key: str):
+def get_loc(query: str):
+    zh = translate(query, baidu_key)
     r = requests.get(decode_url, params={'address': query, 'output': 'json',
                                          'key': qq_key})
                      # proxies={'http': '127.0.0.1:1080'},
@@ -47,9 +51,8 @@ def get_loc(query: str, key: str):
     if r.status_code == 200:
         print(r.content)
     else:
-        print(r.status_code, i, r.text.decode('utf8'))
+        print(r.status_code, query, r.text.decode('utf8'))
     return r.json()
-    # five times per second
 
 
 def main():
@@ -59,7 +62,7 @@ def main():
     address_list = get_address_list(input_file)
     for index, address in enumerate(address_list):
         print(index, address)
-        result = get_loc(address, qq_key)
+        result = get_loc(address)
         all_result.append(result)
         sleep(0.2)
     with open(out_file, 'w', encoding='utf-8') as out:
